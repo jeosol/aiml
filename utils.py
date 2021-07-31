@@ -25,7 +25,7 @@ def create_nn_models(nn_hlayer_info):
         
 def run_nn_models(X_train, y_train, X_valid, y_valid, nn_info, epochs=10, verbose=0):
     nn_models = create_nn_models(nn_info)
-    case_names = ['hidden_layers' + str(info) for info in nn_info]
+    case_names = ['hidden_layers_neurons' + str(info) for info in nn_info]
     model_outputs = []
     for model, info in zip(nn_models, nn_info):
         history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_valid, y_valid), verbose=verbose)        
