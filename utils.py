@@ -37,12 +37,11 @@ def run_nn_models(X_train, y_train, X_valid, y_valid, nn_info, epochs=10, verbos
         val_loss = history.history['val_loss']
         val_accu = history.history['val_accuracy']
         print(f'#hidden_layer(s)={info} Cost={train_loss}, Accuracy={train_accu} Val_Cost={val_loss}, Val_Accuracy={val_accu}')
-    
-    # plot the model training and validation accuracy
-    plot_info(model_outputs, case_names)
-    
-    return model_outputs
 
+    return model_outputs, case_names
+    # plot the model training and validation accuracy
+    # plot_info(model_outputs, case_names)
+    
 def plot_info(model_outputs, case_names):
     for (_,history,_) in model_outputs:        
         plt.plot(range(len(history.history['accuracy'])), history.history['accuracy'])
