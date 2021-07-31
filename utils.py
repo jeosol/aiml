@@ -23,7 +23,7 @@ def create_nn_models(nn_hlayer_info):
         
     return all_models
         
-def run_nn_models(nn_info, epochs=10, verbose=0):
+def run_nn_models(X_train, y_train, X_valid, y_valid, nn_info, epochs=10, verbose=0):
     nn_models = create_nn_models(nn_info)
     case_names = ['hidden_layers' + str(info) for info in nn_info]
     model_outputs = []
