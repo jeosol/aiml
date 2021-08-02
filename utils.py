@@ -2,32 +2,41 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 import numpy as np
 
-def create_nn_models(nn_hlayer_info):
-    "Create NN model architectures."
-    num_nns = len(nn_hlayer_info)
-    all_models = []
-    for info in nn_hlayer_info:
-        # create the sequential model
-        model = keras.models.Sequential()
-        # Add a flattening layer
-        model.add(keras.layers.Flatten(input_shape=[28,28]))
+def create_nn_model(hidden_layers_units, output_layer_unit):
+    "Create an NN model architectures."
+    # create the sequential model
+    model = keras.models.Sequential()
+    # Add a flattening layer
+    model.add(keras.layers.Flatten(input_shape=[28,28]))
+    # Loop over the hidden layers
+    for hidden_layer_unit in hidden_layers_units:
         # Add the hidden layers with relu activation
-        for hh_units in info:
-            model.add(keras.layers.Dense(hh_units, activation='relu'))
-        # Add the output layer with softmax activation (we have 10 independent and exclusive outcomes: digits 0 to 9)
-        model.add(keras.layers.Dense(10, activation='softmax'))
-        # compile the model
-        model.compile(loss='sparse_categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
-        # Add the model to the list of models
-        all_models.append(model)
+        model.add(keras.layers.Dense(hidden_layer_unit, activation='relu'))
         
-    return all_models
-        
-def run_nn_models(X_train, y_train, X_valid, y_valid, nn_info, epochs=10, verbose=0):
-    nn_models = create_nn_models(nn_info)
-    case_names = ['hidden_layers_neurons' + str(info) for info in nn_info]
+    # Add the output layer with softmax activation (we have 10 independent and exclusive outcomes: digits 0 to 9)
+    model.add(keras.layers.Dense(output_layer_unit, activation='softmax'))
+    # compile the model
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+    # Add the model to the list of models
+    return model, 'hidden_layers_neurons' + str(hidden_layers_units)
+
+def create_nn_models(hidden_layer_infos, output_layer_unit):
+    "Create multiple hidden NN model architectures"
+    num_nns = len(hidden_layer_infos)
+    models = []
+    casenames=[]
+    for hidden_layer_units in hidden_layer_infos:
+        model, casename = create_nn_model(hidden_layer_units, output_layer_unit)
+        models.append(model)
+        casenames.append(casename)
+
+    return models, casenames
+                
+def run_nn_models(X_train, y_train, X_valid, y_valid, hidden_layers_infos, output_layer_unit, epochs=10, verbose=0):
+    models, casenames = create_nn_models(hidden_layers_infos, output_layer_unit)
+
     model_outputs = []
-    for model, info in zip(nn_models, nn_info):
+    for model, info in zip(models, casenames):
         history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_valid, y_valid), verbose=verbose)        
         model_outputs.append((info, history, model))
     
@@ -38,7 +47,7 @@ def run_nn_models(X_train, y_train, X_valid, y_valid, nn_info, epochs=10, verbos
         val_accu = history.history['val_accuracy']
         print(f'#hidden_layer(s)={info} Cost={train_loss}, Accuracy={train_accu} Val_Cost={val_loss}, Val_Accuracy={val_accu}')
 
-    return model_outputs, case_names
+    return model_outputs, casenames
     # plot the model training and validation accuracy
     # plot_info(model_outputs, case_names)
     
