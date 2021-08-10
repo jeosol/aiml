@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def create_nn_model(hidden_layers_units, output_layer_unit):
-    "Create an NN model architectures."
+    """Create an NN model architectures"""
     # create the sequential model
     model = keras.models.Sequential()
     # Add a flattening layer
@@ -21,7 +21,7 @@ def create_nn_model(hidden_layers_units, output_layer_unit):
     return model, 'hidden_layers_neurons' + str(hidden_layers_units)
 
 def create_nn_models(hidden_layer_infos, output_layer_unit):
-    "Create multiple hidden NN model architectures"
+    """Create multiple hidden NN model architectures"""
     num_nns = len(hidden_layer_infos)
     models = []
     casenames=[]
@@ -34,7 +34,7 @@ def create_nn_models(hidden_layer_infos, output_layer_unit):
                 
 def run_nn_models(X_train, y_train, X_valid, y_valid, hidden_layers_infos, output_layer_unit, epochs=10, verbose=0):
     models, casenames = create_nn_models(hidden_layers_infos, output_layer_unit)
-
+    """Run different NN models"""
     model_outputs = []
     for model, info in zip(models, casenames):
         history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_valid, y_valid), verbose=verbose)        
@@ -52,6 +52,7 @@ def run_nn_models(X_train, y_train, X_valid, y_valid, hidden_layers_infos, outpu
     # plot_info(model_outputs, case_names)
     
 def plot_info(model_outputs, case_names):
+    """Make plots of training and validation loss and accuracy"""
     fig, axs = plt.subplots(2,2, figsize=(15,15))
     for (_,history,_) in model_outputs:        
         axs[0,0].plot(range(len(history.history['accuracy'])), history.history['accuracy'])
