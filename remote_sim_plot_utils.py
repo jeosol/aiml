@@ -7,7 +7,7 @@ def plot_field_results(field_results):
     field_water_prod_rates = field_results["water-prod-rates"]
     field_water_inje_rates = field_results["water-inje-rates"]
     columns = ['oil-prod-rates', 'water-prod-rates', 'water-inje-rates']
-    legends = ['Oil Prod. Rates', 'Water Prod. Rates', 'Water Inje. Rates']        
+    legends = ['Oil Production Rate', 'Water Production Rate', 'Water Injection Rate']        
     if unit_system.lower() == "field" :
         rate_unit = "(STB/D)"        
     else:
@@ -22,6 +22,6 @@ def plot_field_results(field_results):
     plt.legend(legends)
     plt.grid(True)
     plt.xlabel('Time (days)')
-    plt.ylabel('Oil, Water Prod. Rates' + rate_unit)
+    plt.ylabel('Fluid Rates' + rate_unit)
     plt.title('Field Production and Injection Rates vs. Time')
                
