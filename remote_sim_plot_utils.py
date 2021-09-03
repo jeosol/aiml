@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 
 def plot_field_results(field_results):
     """Make a sample plot of the oil production rate vs. time (in days)"""
+    plt.figure()
     unit_system = field_results['unit-system']
     field_oil_rates = field_results["oil-prod-rates"]
     field_water_prod_rates = field_results["water-prod-rates"]
@@ -25,3 +26,33 @@ def plot_field_results(field_results):
     plt.ylabel('Fluid Rates' + rate_unit)
     plt.title('Field Production and Injection Rates vs. Time')
                
+def plot_producer_results(results):
+    """Make plot of relevant production quantities for producer wells"""
+    plt.figure()
+    unit_system = results['field_results']['unit-system']
+    well_results = results['well_results']
+    producer_well_names = results['producer_well_names']
+    if unit_system.lower() == "field" :
+        rate_unit = "(STB/D)"        
+    else:
+        rate_unit = "(M3/D)"
+    for well_name in producer_well_names:
+        curr_well_results = well_results[well_name]
+        plt.plot(curr_well_results['time-days'], curr_well_results['oil-prod-rates'])    
+    plt.legend(producer_well_names)
+    plt.grid(True)
+    plt.xlabel('Time (days)')
+    plt.ylabel('Oil Production Rate ' + rate_unit)
+    plt.title ('Well Oil Production Rates vs. Time')
+    plt.figure()
+    for well_name in producer_well_names:
+        curr_well_results = well_results[well_name]
+        plt.plot(curr_well_results['time-days'], curr_well_results['water-prod-rates'])
+    plt.legend(producer_well_names)
+    plt.grid(True)
+    plt.xlabel('Time (days)')
+    plt.ylabel('Water Production Rate ' + rate_unit)
+    plt.title ('Well Water Production Rates vs. Time')
+                    
+def plot_injector_results(results):
+    pass
