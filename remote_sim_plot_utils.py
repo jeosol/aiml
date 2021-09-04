@@ -33,9 +33,11 @@ def plot_producer_results(results):
     well_results = results['well_results']
     producer_well_names = results['producer_well_names']
     if unit_system.lower() == "field" :
-        rate_unit = "(STB/D)"        
+        rate_unit = "(STB/D)"     
+        press_unit = 'psi'
     else:
         rate_unit = "(M3/D)"
+        press_unit = 'barsa'
     for well_name in producer_well_names:
         curr_well_results = well_results[well_name]
         plt.plot(curr_well_results['time-days'], curr_well_results['oil-prod-rates'])    
@@ -53,6 +55,18 @@ def plot_producer_results(results):
     plt.xlabel('Time (days)')
     plt.ylabel('Water Production Rate ' + rate_unit)
     plt.title ('Well Water Production Rates vs. Time')
+    plt.figure()
+    max_pressure = -9
+    for well_name in producer_well_names:
+        curr_well_results = well_results[well_name]
+        plt.plot(curr_well_results['time-days'], curr_well_results['pressures'])
+        max_pressure = max(max_pressure, max(curr_well_results['pressures']))
+    plt.legend(producer_well_names)
+    plt.grid(True)
+    plt.ylim([0, max_pressure * 1.1])
+    plt.xlabel('Time (days)')
+    plt.ylabel('Well BHP ' + press_unit)
+    plt.title ('Production Well BHP Pressures vs. Time')
                     
 def plot_injector_results(results):
     """Make plot of relevant quantities for injection wells"""
@@ -61,9 +75,11 @@ def plot_injector_results(results):
     well_results = results['well_results']
     injector_well_names = results['injector_well_names']
     if unit_system.lower() == "field" :
-        rate_unit = "psi"        
+        rate_unit = "STB/D"        
+        press_unit = "psi"
     else:
-        rate_unit = "barsa"
+        rate_unit = "M3/D"
+        press_unit = "barsa"
     for well_name in injector_well_names:
         curr_well_results = well_results[well_name]
         plt.plot(curr_well_results['time-days'], curr_well_results['water-inje-rates'])    
@@ -73,12 +89,15 @@ def plot_injector_results(results):
     plt.ylabel('Water Injection Rate ' + rate_unit)
     plt.title ('Well Water Injection Rate vs. Time')
     plt.figure()
+    max_pressure = -9
     for well_name in injector_well_names:
         curr_well_results = well_results[well_name]
         plt.plot(curr_well_results['time-days'], curr_well_results['pressures'])
+        max_pressure = max(max_pressure, max(curr_well_results['pressures']))
     plt.legend(injector_well_names)
     plt.grid(True)
+    plt.ylim([0, max_pressure * 1.1])
     plt.xlabel('Time (days)')
-    plt.ylabel('Well BHP ' + rate_unit)
-    plt.title ('Well BHP Pressures vs. Time')
+    plt.ylabel('Well BHP ' + press_unit)
+    plt.title ('Injection Well BHP Pressures vs. Time')
     
