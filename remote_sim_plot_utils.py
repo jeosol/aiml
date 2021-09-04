@@ -55,4 +55,30 @@ def plot_producer_results(results):
     plt.title ('Well Water Production Rates vs. Time')
                     
 def plot_injector_results(results):
-    pass
+    """Make plot of relevant quantities for injection wells"""
+    plt.figure()
+    unit_system = results['field_results']['unit-system']
+    well_results = results['well_results']
+    injector_well_names = results['injector_well_names']
+    if unit_system.lower() == "field" :
+        rate_unit = "psi"        
+    else:
+        rate_unit = "barsa"
+    for well_name in injector_well_names:
+        curr_well_results = well_results[well_name]
+        plt.plot(curr_well_results['time-days'], curr_well_results['water-inje-rates'])    
+    plt.legend(injector_well_names)
+    plt.grid(True)
+    plt.xlabel('Time (days)')
+    plt.ylabel('Water Injection Rate ' + rate_unit)
+    plt.title ('Well Water Injection Rate vs. Time')
+    plt.figure()
+    for well_name in injector_well_names:
+        curr_well_results = well_results[well_name]
+        plt.plot(curr_well_results['time-days'], curr_well_results['pressures'])
+    plt.legend(injector_well_names)
+    plt.grid(True)
+    plt.xlabel('Time (days)')
+    plt.ylabel('Well BHP ' + rate_unit)
+    plt.title ('Well BHP Pressures vs. Time')
+    
