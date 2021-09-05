@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 
-def plot_field_results(field_results):
+def plot_field_results(results):
     """Make a sample plot of the oil production rate vs. time (in days)"""
+    if results['field_results'] == []:
+        return
     plt.figure()
+    field_results = results['field_esults']
     unit_system = field_results['unit-system']
     field_oil_rates = field_results["oil-prod-rates"]
     field_water_prod_rates = field_results["water-prod-rates"]
@@ -28,6 +31,8 @@ def plot_field_results(field_results):
                
 def plot_producer_results(results):
     """Make plot of relevant production quantities for producer wells"""
+    if results['well_results'] == []:
+        return
     plt.figure()
     unit_system = results['field_results']['unit-system']
     well_results = results['well_results']
@@ -70,6 +75,9 @@ def plot_producer_results(results):
                     
 def plot_injector_results(results):
     """Make plot of relevant quantities for injection wells"""
+    if results['well_results'] == []:
+        return
+       
     plt.figure()
     unit_system = results['field_results']['unit-system']
     well_results = results['well_results']
