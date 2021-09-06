@@ -5,7 +5,7 @@ def plot_field_results(results):
     if results['field_results'] == []:
         return
     plt.figure()
-    field_results = results['field_esults']
+    field_results = results['field_results']
     unit_system = field_results['unit-system']
     field_oil_rates = field_results["oil-prod-rates"]
     field_water_prod_rates = field_results["water-prod-rates"]
@@ -34,9 +34,10 @@ def plot_producer_results(results):
     if results['well_results'] == []:
         return
     plt.figure()
-    unit_system = results['field_results']['unit-system']
+    
     well_results = results['well_results']
     producer_well_names = results['producer_well_names']
+    unit_system = well_results[producer_well_names[0]]['unit-system']
     if unit_system.lower() == "field" :
         rate_unit = "(STB/D)"     
         press_unit = 'psi'
